@@ -28,7 +28,7 @@ class CardGameActivitySolo : AppCompatActivity() {
         //Initialize Program with set variables and functions
 
         //Before rounding
-        var betInitial = 0.0
+        var betInitial: Double
 
         //After rounding
         var betFinal = 0
@@ -302,7 +302,7 @@ class CardGameActivitySolo : AppCompatActivity() {
             while ({ text = bufferedReader.readLine(); text }() != null) {
                 stringBuilder.append(text)
             }
-            Log.d("returnMessage", "returning bank balance of ${stringBuilder.toString()}")
+            d("returnMessage", "returning bank balance of $stringBuilder")
             return(stringBuilder.toString())
         }
 
@@ -312,13 +312,30 @@ class CardGameActivitySolo : AppCompatActivity() {
             try {
                 fileOutputStream = openFileOutput("BankBalance.txt", Context.MODE_PRIVATE)
                 fileOutputStream.write(amount.toByteArray())
-                Log.d("Amount", "Bank balance set to $amount")
+                d("Amount", "Bank balance set to $amount")
             }catch (e: Exception){
                 e.printStackTrace()
             }
         }
 
+        //Set initial bank balance
         textCurrentBalance.text = "Balance: $" +("%.2f".format(getBankBalance().toDouble()))
+
+        //Check to see if user has any money
+        fun checkUserBalance() {
+            if (getBankBalance().toDouble() == 0.0) {
+                seekBarBet.isEnabled = false
+
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle("Out of funds!")
+                builder.setMessage("You are out of funds, visit the bank to get more money.")
+                builder.show()
+            }
+
+
+        }
+
+        checkUserBalance()
 
         //Button lower functions
         buttonLower.setOnClickListener {
@@ -449,6 +466,7 @@ class CardGameActivitySolo : AppCompatActivity() {
                 var BANK_BALANCE = getBankBalance().toDouble()
                 BANK_BALANCE -= betFinal
                 setBankBalance(BANK_BALANCE.toString())
+                checkUserBalance()
             }
 
             //Change Bank Balance
@@ -587,6 +605,7 @@ class CardGameActivitySolo : AppCompatActivity() {
                 var BANK_BALANCE = getBankBalance().toDouble()
                 BANK_BALANCE -= betFinal
                 setBankBalance(BANK_BALANCE.toString())
+                checkUserBalance()
             }
 
             //Change Bank Balance
