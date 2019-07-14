@@ -330,6 +330,7 @@ class CardGameActivitySolo : AppCompatActivity() {
                 builder.setTitle("Out of funds!")
                 builder.setMessage("You are out of funds, visit the bank to get more money.")
                 builder.show()
+
             }
 
 
